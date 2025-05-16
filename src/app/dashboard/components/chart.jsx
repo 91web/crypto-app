@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-
+import "../../style/chart.css";
 export default function CryptoTradingChart() {
   // State for chart data and UI
   const [cryptoData, setCryptoData] = useState(null);
@@ -269,39 +269,14 @@ export default function CryptoTradingChart() {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          backgroundColor: "#111827",
-          color: "white",
-          //  fontFamily: "system-ui, -apple-system, sans-serif",
-        }}
-      >
+      <div className="loading-container">
         Loading {getCurrentCrypto().name} data...
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-
-          backgroundColor: "#111827",
-          color: "white",
-          // fontFamily: "system-ui, -apple-system, sans-serif",
-        }}
-      >
-        {error}
-      </div>
-    );
+    return <div className="error-container">{error}</div>;
   }
 
   // Get current price and stats
@@ -342,763 +317,404 @@ export default function CryptoTradingChart() {
   const currentCrypto = getCurrentCrypto();
 
   return (
-    <div
-      style={{
-        backgroundColor: "#111827",
-        color: "white",
-        width: "100%",
-        height: isFullscreen ? "100vh" : "auto",
-        //fontFamily: "system-ui, -apple-system, sans-serif",
-        overflow: "hidden",
-      }}
-    >
-      {/* Time interval selector */}
+    <>
+
+
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "16px",
-        }}
+        className={`crypto-chart-container ${isFullscreen ? "fullscreen" : ""}`}
       >
-        <div
-          style={{
-            color: "#9ca3af",
-            marginRight: "16px",
-            fontSize: "14px",
-          }}
-        >
-          Time
-        </div>
+        {/* Time interval selector */}
+        <div className="time-interval-selector">
+          <div className="time-label">Time</div>
 
-        {["1H", "2H", "4H", "1D", "1W", "1M"].map((interval) => (
-          <button
-            key={interval}
-            onClick={() => setSelectedInterval(interval)}
-            style={{
-              backgroundColor:
-                selectedInterval === interval ? "#374151" : "transparent",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              padding: "4px 8px",
-              marginRight: "8px",
-              cursor: "pointer",
-              fontSize: "12px",
-              transition: "background-color 0.2s",
-            }}
-          >
-            {interval}
-          </button>
-        ))}
-
-        <div
-          style={{
-            marginLeft: "auto",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <button
-            style={{
-              backgroundColor: "#374151",
-              color: "white",
-              border: "none",
-              marginTop: "4px",
-              borderRadius: "4px",
-              padding: "4px 8px",
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              fontSize: "12px",
-              transition: "background-color 0.2s",
-            }}
-          >
-            Fx Indicators
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              style={{ marginLeft: "4px" }}
+          {["1H", "2H", "4H", "1D", "1W", "1M"].map((interval) => (
+            <button
+              key={interval}
+              onClick={() => setSelectedInterval(interval)}
+              className={`interval-button ${
+                selectedInterval === interval ? "active" : ""
+              }`}
             >
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+              {interval}
+            </button>
+          ))}
 
-      {/* Crypto info */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-          marginBottom: "16px",
-          paddingBottom: "8px",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-        }}
-      >
-        {/* Crypto selector */}
-        <div
-          style={{
-            position: "relative",
-          }}
-        >
           <div
-            onClick={() => setShowCoinSelector(!showCoinSelector)}
             style={{
+              marginLeft: "auto",
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              cursor: "pointer",
-              padding: "4px 8px",
-              borderRadius: "4px",
-              backgroundColor: "#1f2937",
-              transition: "background-color 0.2s",
             }}
           >
-            <div
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                backgroundColor: currentCrypto.color,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: "12px",
-              }}
-            >
-              {currentCrypto.symbol.charAt(0)}
-            </div>
-            <span style={{ fontWeight: "bold" }}>
-              {currentCrypto.symbol}/USD
-            </span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <button className="fx-indicators-button">
+              Fx Indicators
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                style={{ marginLeft: "4px" }}
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
+        </div>
 
-          {/* Dropdown for coin selection */}
-          {showCoinSelector && (
+        {/* Crypto info */}
+        <div className="crypto-info">
+          {/* Crypto selector */}
+          <div className="crypto-selector">
             <div
-              style={{
-                position: "absolute",
-                top: "100%",
-                left: "0",
-                backgroundColor: "#1f2937",
-                borderRadius: "4px",
-                boxShadow:
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                zIndex: "10",
-                marginTop: "4px",
-                width: "100px",
-              }}
+              className="crypto-selector-button"
+              onClick={() => setShowCoinSelector(!showCoinSelector)}
             >
-              {availableCryptos.map((crypto) => (
-                <div
-                  key={crypto.id}
-                  onClick={() => changeCrypto(crypto.id)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "8px 12px",
-                    cursor: "pointer",
-                    borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                    transition: "background-color 0.2s",
-                    backgroundColor:
-                      selectedCrypto === crypto.id ? "#374151" : "transparent",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#374151";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (selectedCrypto !== crypto.id) {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }
-                  }}
-                >
+              <div
+                className="crypto-symbol-icon"
+                style={{ backgroundColor: currentCrypto.color }}
+              >
+                {currentCrypto.symbol.charAt(0)}
+              </div>
+              <span style={{ fontWeight: "bold" }}>
+                {currentCrypto.symbol}/USD
+              </span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            {/* Dropdown for coin selection */}
+            {showCoinSelector && (
+              <div className="crypto-dropdown">
+                {availableCryptos.map((crypto) => (
                   <div
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                      backgroundColor: crypto.color,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#fff",
-                      fontWeight: "bold",
-                      fontSize: "10px",
-                    }}
+                    key={crypto.id}
+                    onClick={() => changeCrypto(crypto.id)}
+                    className={`crypto-dropdown-item ${
+                      selectedCrypto === crypto.id ? "active" : ""
+                    }`}
                   >
-                    {crypto.symbol.charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: "bold" }}>{crypto.symbol}</div>
-                    <div style={{ fontSize: "12px", color: "#9ca3af" }}>
-                      {crypto.name}
+                    <div
+                      className="crypto-dropdown-icon"
+                      style={{ backgroundColor: crypto.color }}
+                    >
+                      {crypto.symbol.charAt(0)}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: "bold" }}>{crypto.symbol}</div>
+                      <div style={{ fontSize: "12px", color: "#9ca3af" }}>
+                        {crypto.name}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="price-indicator" style={{ color: "#00b386" }}>
+            O <span className="price-value">{formatPrice(openPrice)}</span>
+          </div>
+
+          <div className="price-indicator" style={{ color: "#00b386" }}>
+            H <span className="price-value">{formatPrice(highPrice)}</span>
+          </div>
+
+          <div className="price-indicator" style={{ color: "#ff5252" }}>
+            L <span className="price-value">{formatPrice(lowPrice)}</span>
+          </div>
+
+          <div className="price-indicator" style={{ color: "#00b386" }}>
+            C <span className="price-value">{formatPrice(closePrice)}</span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <span>Change:</span>
+            <span style={{ color: priceChange >= 0 ? "#00b386" : "#ff5252" }}>
+              {priceChange >= 0 ? "+" : ""}
+              {priceChange.toFixed(2)}%
+            </span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              fontSize: "14px",
+            }}
+          >
+            <span>Amplitude:</span>
+            <span style={{ color: "#00b386" }}>{amplitude}%</span>
+          </div>
         </div>
 
-        <div
-          style={{
-            color: "#00b386",
-            fontWeight: "500",
-            fontSize: "14px",
-          }}
-        >
-          O{" "}
-          <span style={{ fontWeight: "medium", fontSize: { xs: 10, md: 14 } }}>
-            {formatPrice(openPrice)}
-          </span>
-        </div>
+        {/* Chart container */}
+        <div ref={chartContainerRef} className="chart-container">
+          {/* Price labels on the right */}
+          <div className="price-labels">
+            {priceLabels.map((label, index) => (
+              <div key={index} className="price-label">
+                {label}
+              </div>
+            ))}
+          </div>
 
-        <div
-          style={{
-            color: "#00b386",
-            fontWeight: "500",
-            fontSize: { xs: "10px", md: "14px" },
-          }}
-        >
-          H{" "}
-          <span style={{ fontWeight: "medium", fontSize: { xs: 10, md: 14 } }}>
-            {formatPrice(highPrice)}
-          </span>
-        </div>
+          {/* Main chart area */}
+          <div
+            ref={chartRef}
+            className="chart-area"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
+            {/* Render candles */}
+            {candleData.map((candle, index) => {
+              const wickTop = priceToY(candle.high);
+              const wickBottom = priceToY(candle.low);
+              const bodyTop = priceToY(Math.max(candle.open, candle.close));
+              const bodyBottom = priceToY(Math.min(candle.open, candle.close));
+              const bodyHeight = Math.max(1, bodyBottom - bodyTop);
+              const isHighlighted = hoveredIndex === index;
 
-        <div
-          style={{
-            color: "#ff5252",
-            fontWeight: "500",
-            fontSize: { xs: "10px", md: "14px" },
-          }}
-        >
-          L{" "}
-          <span style={{ fontWeight: "medium", fontSize: { xs: 10, md: 14 } }}>
-            {formatPrice(lowPrice)}
-          </span>
-        </div>
+              return (
+                <div
+                  key={index}
+                  className={`candle ${isHighlighted ? "highlighted" : ""}`}
+                  style={{ left: `${candle.xPos}px` }}
+                  onMouseEnter={() => {
+                    setHoveredCandle(candle);
+                    setHoveredIndex(index);
+                  }}
+                >
+                  {/* Vertical time indicator line */}
+                  {candle.hasVerticalLine && (
+                    <div
+                      className="vertical-indicator-line"
+                      style={{ left: `${candleWidth / 2}px` }}
+                    />
+                  )}
 
-        <div
-          style={{
-            color: "#00b386",
-            fontWeight: "500",
-            fontSize: { xs: "10px", md: "14px" },
-          }}
-        >
-          C{" "}
-          <span style={{ fontWeight: "medium", fontSize: { xs: 10, md: 14 } }}>
-            {formatPrice(closePrice)}
-          </span>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          <span>Change:</span>
-          <span style={{ color: priceChange >= 0 ? "#00b386" : "#ff5252" }}>
-            {priceChange >= 0 ? "+" : ""}
-            {priceChange.toFixed(2)}%
-          </span>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-            fontSize: { xs: "10px", md: "14px" },
-          }}
-        >
-          <span>Amplitude:</span>
-          <span style={{ color: "#00b386" }}>{amplitude}%</span>
-        </div>
-      </div>
-
-      {/* Chart container */}
-      <div
-        ref={chartContainerRef}
-        style={{
-          position: "relative",
-          height: "420px",
-          width: "100%",
-          marginBottom: "16px",
-        }}
-      >
-        {/* Price labels on the right */}
-        <div
-          style={{
-            position: "absolute",
-            right: "0",
-            top: "0",
-            height: "300px",
-            width: "80px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            zIndex: "2",
-          }}
-        >
-          {priceLabels.map((label, index) => (
-            <div
-              key={index}
-              style={{
-                color: "#9ca3af",
-                fontSize: "12px",
-                textAlign: "right",
-                paddingRight: "8px",
-              }}
-            >
-              {label}
-            </div>
-          ))}
-        </div>
-
-        {/* Main chart area */}
-        <div
-          ref={chartRef}
-          style={{
-            position: "relative",
-            height: "300px",
-            width: "calc(100% - 80px)",
-            marginRight: "80px",
-            borderBottom: "1px dashed rgba(255, 255, 255, 0.1)",
-            cursor: "crosshair",
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Render candles */}
-          {candleData.map((candle, index) => {
-            const wickTop = priceToY(candle.high);
-            const wickBottom = priceToY(candle.low);
-            const bodyTop = priceToY(Math.max(candle.open, candle.close));
-            const bodyBottom = priceToY(Math.min(candle.open, candle.close));
-            const bodyHeight = Math.max(1, bodyBottom - bodyTop);
-            const isHighlighted = hoveredIndex === index;
-
-            return (
-              <div
-                key={index}
-                style={{
-                  position: "absolute",
-                  left: `${candle.xPos}px`,
-                  zIndex: isHighlighted ? "3" : "1",
-                }}
-                onMouseEnter={() => {
-                  setHoveredCandle(candle);
-                  setHoveredIndex(index);
-                }}
-              >
-                {/* Vertical time indicator line */}
-                {candle.hasVerticalLine && (
+                  {/* Candle wick */}
                   <div
+                    className={`candle-wick ${candle.isGreen ? "" : "red"} ${
+                      isHighlighted ? "highlighted" : ""
+                    }`}
                     style={{
-                      position: "absolute",
-                      top: "0",
+                      top: `${wickTop}px`,
                       left: `${candleWidth / 2}px`,
-                      width: "1px",
-                      height: "420px", // Full height including volume
-                      backgroundColor: "rgba(255, 255, 255, 0.3)",
-                      zIndex: "1",
+                      height: `${wickBottom - wickTop}px`,
+                      opacity: isHighlighted
+                        ? "1"
+                        : hoveredIndex !== null
+                        ? "0.5"
+                        : "1",
                     }}
                   />
-                )}
 
-                {/* Candle wick */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: `${wickTop}px`,
-                    left: `${candleWidth / 2}px`,
-                    width: isHighlighted ? "2px" : "1px",
-                    height: `${wickBottom - wickTop}px`,
-                    backgroundColor: candle.isGreen ? "#00b386" : "#ff5252",
-                    opacity: isHighlighted
-                      ? "1"
-                      : hoveredIndex !== null
-                      ? "0.5"
-                      : "1",
-                    transition: "opacity 0.1s, width 0.1s",
-                  }}
-                />
+                  {/* Candle body */}
+                  <div
+                    className={`candle-body ${candle.isGreen ? "" : "red"} ${
+                      isHighlighted ? "highlighted" : ""
+                    }`}
+                    style={{
+                      top: `${bodyTop}px`,
+                      left: isHighlighted ? "-1px" : "0",
+                      width: isHighlighted
+                        ? `${candleWidth + 2}px`
+                        : `${candleWidth}px`,
+                      height: `${bodyHeight}px`,
+                      opacity: isHighlighted
+                        ? "1"
+                        : hoveredIndex !== null
+                        ? "0.5"
+                        : "1",
+                    }}
+                  />
+                </div>
+              );
+            })}
 
-                {/* Candle body */}
+            {/* Current price line */}
+            <div
+              className="current-price-line"
+              style={{ top: `${priceToY(currentPrice)}px` }}
+            />
+
+            {/* Current price label */}
+            <div
+              className="current-price-label"
+              style={{ top: `${priceToY(currentPrice)}px` }}
+            >
+              {formatPrice(currentPrice)}
+            </div>
+
+            {/* Hover crosshair - vertical line */}
+            {hoveredCandle && (
+              <div
+                className="hover-vertical-line"
+                style={{ left: `${mousePositionRef.current.x}px` }}
+              />
+            )}
+
+            {/* Hover crosshair - horizontal line */}
+            {hoveredCandle && (
+              <div
+                className="hover-horizontal-line"
+                style={{ top: `${mousePositionRef.current.y}px` }}
+              />
+            )}
+
+            {/* Hover tooltip */}
+            {hoveredCandle && (
+              <div
+                className="hover-tooltip"
+                style={{
+                  left:
+                    mousePositionRef.current.x < (chartWidth.current - 80) / 2
+                      ? mousePositionRef.current.x + 20
+                      : mousePositionRef.current.x - 150,
+                  top:
+                    mousePositionRef.current.y < 100
+                      ? mousePositionRef.current.y + 10
+                      : mousePositionRef.current.y - 110,
+                }}
+              >
+                <div className="tooltip-header">
+                  {formatDate(hoveredCandle.date)}{" "}
+                  {formatTime(hoveredCandle.date)}
+                </div>
+                <div className="tooltip-row">
+                  <span className="tooltip-label">Open:</span>
+                  <span className="tooltip-value">
+                    {formatPrice(hoveredCandle.open)}
+                  </span>
+                </div>
+                <div className="tooltip-row">
+                  <span className="tooltip-label">High:</span>
+                  <span className="tooltip-value green">
+                    {formatPrice(hoveredCandle.high)}
+                  </span>
+                </div>
+                <div className="tooltip-row">
+                  <span className="tooltip-label">Low:</span>
+                  <span className="tooltip-value red">
+                    {formatPrice(hoveredCandle.low)}
+                  </span>
+                </div>
+                <div className="tooltip-row">
+                  <span className="tooltip-label">Close:</span>
+                  <span className="tooltip-value">
+                    {formatPrice(hoveredCandle.close)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Volume info */}
+          <div className="volume-info">
+            <div>
+              Vol({currentCrypto.symbol}):{" "}
+              <span className="volume-label">65,534K</span>
+            </div>
+            <div>
+              Val(USDT): <span className="volume-label">2,188</span>
+            </div>
+          </div>
+
+          {/* Volume labels on the right */}
+          <div className="volume-labels">
+            {[0, 1, 2, 3].map((index) => (
+              <div key={index} className="volume-label-item">
+                {index === 0
+                  ? "120"
+                  : index === 1
+                  ? "80"
+                  : index === 2
+                  ? "40"
+                  : "0"}
+              </div>
+            ))}
+          </div>
+
+          {/* Volume chart */}
+          <div ref={volumeRef} className="volume-chart">
+            {/* Render volume bars */}
+            {volumeData.map((vol, index) => {
+              const barHeight = volumeToHeight(vol.volume);
+              const isHighlighted = hoveredIndex === index;
+
+              return (
                 <div
+                  key={index}
+                  className={`volume-bar ${vol.isGreen ? "" : "red"} ${
+                    isHighlighted ? "highlighted" : ""
+                  }`}
                   style={{
-                    position: "absolute",
-                    top: `${bodyTop}px`,
-                    left: isHighlighted ? "-1px" : "0",
+                    left: `${vol.xPos}px`,
                     width: isHighlighted
                       ? `${candleWidth + 2}px`
                       : `${candleWidth}px`,
-                    height: `${bodyHeight}px`,
-                    backgroundColor: candle.isGreen ? "#00b386" : "#ff5252",
+                    height: `${barHeight}px`,
                     opacity: isHighlighted
                       ? "1"
                       : hoveredIndex !== null
-                      ? "0.5"
+                      ? "0.3"
                       : "1",
-                    transition: "opacity 0.1s, width 0.1s, left 0.1s",
-                    boxShadow: isHighlighted
-                      ? "0 0 8px rgba(255, 255, 255, 0.3)"
-                      : "none",
+                  }}
+                  onMouseEnter={() => {
+                    setHoveredCandle(candleData[index]);
+                    setHoveredIndex(index);
                   }}
                 />
-              </div>
-            );
-          })}
+              );
+            })}
 
-          {/* Current price line */}
-          <div
-            style={{
-              position: "absolute",
-              left: "0",
-              right: "0",
-              top: `${priceToY(currentPrice)}px`,
-              height: "1px",
-              backgroundColor: "#00b386",
-              zIndex: "2",
-            }}
-          />
-
-          {/* Current price label */}
-          <div
-            style={{
-              position: "absolute",
-              right: "0",
-              top: `${priceToY(currentPrice)}px`,
-              transform: "translateY(-50%)",
-              backgroundColor: "#00b386",
-              color: "white",
-              padding: "2px 6px",
-              borderRadius: "4px",
-              fontSize: "12px",
-              fontWeight: "bold",
-              zIndex: "3",
-            }}
-          >
-            {formatPrice(currentPrice)}
-          </div>
-
-          {/* Hover crosshair - vertical line */}
-          {hoveredCandle && (
-            <div
-              style={{
-                position: "absolute",
-                top: "0",
-                left: `${mousePositionRef.current.x}px`,
-                width: "1px",
-                height: "100%",
-                backgroundColor: "rgba(255, 255, 255, 0.3)",
-                zIndex: "2",
-              }}
-            />
-          )}
-
-          {/* Hover crosshair - horizontal line */}
-          {hoveredCandle && (
-            <div
-              style={{
-                position: "absolute",
-                top: `${mousePositionRef.current.y}px`,
-                left: "0",
-                width: "100%",
-                height: "1px",
-                backgroundColor: "rgba(255, 255, 255, 0.3)",
-                zIndex: "2",
-              }}
-            />
-          )}
-
-          {/* Hover tooltip */}
-          {hoveredCandle && (
-            <div
-              style={{
-                position: "absolute",
-                left:
-                  mousePositionRef.current.x < (chartWidth.current - 80) / 2
-                    ? mousePositionRef.current.x + 20
-                    : mousePositionRef.current.x - 150,
-                top:
-                  mousePositionRef.current.y < 100
-                    ? mousePositionRef.current.y + 10
-                    : mousePositionRef.current.y - 110,
-                backgroundColor: "rgba(31, 41, 55, 0.95)",
-                padding: "12px",
-                borderRadius: "4px",
-                fontSize: "12px",
-                zIndex: "20",
-                boxShadow:
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                minWidth: "120px",
-              }}
-            >
+            {/* Hover vertical line on volume chart */}
+            {hoveredCandle && (
               <div
-                style={{
-                  marginBottom: "8px",
-                  fontWeight: "bold",
-                  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                  paddingBottom: "4px",
-                }}
-              >
-                {formatDate(hoveredCandle.date)}{" "}
-                {formatTime(hoveredCandle.date)}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "4px",
-                }}
-              >
-                <span style={{ color: "#9ca3af" }}>Open:</span>
-                <span style={{ fontWeight: "bold" }}>
-                  {formatPrice(hoveredCandle.open)}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "4px",
-                }}
-              >
-                <span style={{ color: "#9ca3af" }}>High:</span>
-                <span style={{ fontWeight: "bold", color: "#00b386" }}>
-                  {formatPrice(hoveredCandle.high)}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "4px",
-                }}
-              >
-                <span style={{ color: "#9ca3af" }}>Low:</span>
-                <span style={{ fontWeight: "bold", color: "#ff5252" }}>
-                  {formatPrice(hoveredCandle.low)}
-                </span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "#9ca3af" }}>Close:</span>
-                <span style={{ fontWeight: "bold" }}>
-                  {formatPrice(hoveredCandle.close)}
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Volume info */}
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            marginTop: "8px",
-            marginBottom: "4px",
-            fontSize: "12px",
-            color: "#9ca3af",
-          }}
-        >
-          <div>
-            Vol({currentCrypto.symbol}):{" "}
-            <span style={{ color: "#ff5252" }}>65,534K</span>
-          </div>
-          <div>
-            Val(USDT): <span style={{ color: "#ff5252" }}>2,188</span>
-          </div>
-        </div>
-
-        {/* Volume labels on the right */}
-        <div
-          style={{
-            position: "absolute",
-            right: "0",
-            top: "330px",
-            height: "90px",
-            width: "80px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            zIndex: "1",
-          }}
-        >
-          {[0, 1, 2, 3].map((index) => (
-            <div
-              key={index}
-              style={{
-                color: "#9ca3af",
-                fontSize: "12px",
-                textAlign: "right",
-                paddingRight: "8px",
-              }}
-            >
-              {index === 0
-                ? "120"
-                : index === 1
-                ? "80"
-                : index === 2
-                ? "40"
-                : "0"}
-            </div>
-          ))}
-        </div>
-
-        {/* Volume chart */}
-        <div
-          ref={volumeRef}
-          style={{
-            position: "relative",
-            height: "90px",
-            width: "calc(100% - 80px)",
-            marginRight: "80px",
-            marginTop: "8px",
-          }}
-        >
-          {/* Render volume bars */}
-          {volumeData.map((vol, index) => {
-            const barHeight = volumeToHeight(vol.volume);
-            const isHighlighted = hoveredIndex === index;
-
-            return (
-              <div
-                key={index}
-                style={{
-                  position: "absolute",
-                  bottom: "0",
-                  left: `${vol.xPos}px`,
-                  width: isHighlighted
-                    ? `${candleWidth + 2}px`
-                    : `${candleWidth}px`,
-                  height: `${barHeight}px`,
-                  backgroundColor: vol.isGreen ? "#00b386" : "#ff5252",
-                  opacity: isHighlighted
-                    ? "1"
-                    : hoveredIndex !== null
-                    ? "0.3"
-                    : "1",
-                  transition: "opacity 0.1s, width 0.1s",
-                  boxShadow: isHighlighted
-                    ? "0 0 8px rgba(255, 255, 255, 0.2)"
-                    : "none",
-                  zIndex: isHighlighted ? "3" : "1",
-                }}
-                onMouseEnter={() => {
-                  setHoveredCandle(candleData[index]);
-                  setHoveredIndex(index);
-                }}
+                className="hover-vertical-line"
+                style={{ left: `${mousePositionRef.current.x}px` }}
               />
-            );
-          })}
+            )}
+          </div>
 
-          {/* Hover vertical line on volume chart */}
-          {hoveredCandle && (
-            <div
-              style={{
-                position: "absolute",
-                top: "0",
-                left: `${mousePositionRef.current.x}px`,
-                width: "1px",
-                height: "100%",
-                backgroundColor: "rgba(255, 255, 255, 0.3)",
-                zIndex: "2",
-              }}
-            />
-          )}
-        </div>
-
-        {/* Date labels with distinct vertical grid lines */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "0",
-            marginBottom: "-15px",
-            left: "0",
-            right: "80px", // Account for right padding
-            display: "flex",
-            justifyContent: "space-between",
-            color: "#9ca3af",
-            fontSize: "10px",
-            paddingTop: "4px",
-          }}
-        >
-          {[
-            "02/21",
-            "03/14",
-            "03/28",
-            "04/04",
-            "04/11",
-            "04/18",
-            "04/25",
-            "05/02",
-            "05/09",
-            "05/16",
-            "05/23",
-          ].map((date, index, dates) => (
-            <div
-              key={index}
-              style={{
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width:
-                  index === 0
-                    ? "auto"
-                    : index === dates.length - 1
-                    ? "auto"
-                    : "100%",
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "16px", // Position above the text
-                  height: "420px", // Extend up through the chart
-                  width: "1px",
-                  backgroundColor: "rgba(255, 255, 255, 0.05)",
-                  zIndex: "1",
-                }}
-              ></div>
-              <div
-                style={{
-                  position: "relative",
-                  zIndex: "2",
-                  backgroundColor: "#111827",
-                  padding: "0 4px",
-                }}
-              >
-                {date}
+          {/* Date labels with distinct vertical grid lines */}
+          <div className="date-labels">
+            {[
+              "02/21",
+              "03/14",
+              "03/28",
+              "04/04",
+              "04/11",
+              "04/18",
+              "04/25",
+              "05/02",
+              "05/09",
+              "05/16",
+              "05/23",
+            ].map((date, index, dates) => (
+              <div key={index} className="date-label-container">
+                <div className="date-grid-line"></div>
+                <div className="date-label">{date}</div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
- 
-    </div>
+    </>
   );
 }

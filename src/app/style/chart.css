@@ -1,0 +1,431 @@
+
+    /* Base styles */
+    .crypto-chart-container {
+      background-color: #111827;
+      color: white;
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+    }
+
+    /* Loading and error states */
+    .loading-container,
+    .error-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #111827;
+      color: white;
+    }
+
+    /* Time interval selector */
+    .time-interval-selector {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .time-label {
+      color: #9ca3af;
+      margin-right: 16px;
+      font-size: 14px;
+    }
+
+    .interval-button {
+      background-color: transparent;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-right: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+
+    .interval-button.active {
+      background-color: #374151;
+    }
+
+    .fx-indicators-button {
+      background-color: #374151;
+      color: white;
+      border: none;
+      margin-top: 4px;
+      border-radius: 4px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+
+    /* Crypto info section */
+    .crypto-info {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Crypto selector */
+    .crypto-selector {
+      position: relative;
+    }
+
+    .crypto-selector-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #1f2937;
+      transition: background-color 0.2s;
+    }
+
+    .crypto-symbol-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .crypto-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #1f2937;
+      border-radius: 4px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 10;
+      margin-top: 4px;
+      width: 100px;
+    }
+
+    .crypto-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background-color 0.2s;
+    }
+
+    .crypto-dropdown-item:hover {
+      background-color: #374151;
+    }
+
+    .crypto-dropdown-item.active {
+      background-color: #374151;
+    }
+
+    .crypto-dropdown-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    /* Price indicators */
+    .price-indicator {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .price-value {
+      font-weight: medium;
+    }
+
+    /* Chart container */
+    .chart-container {
+      position: relative;
+      height: 420px;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .price-labels {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 300px;
+      width: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    .price-label {
+      color: #9ca3af;
+      font-size: 12px;
+      text-align: right;
+      padding-right: 8px;
+    }
+
+    /* Main chart area */
+    .chart-area {
+      position: relative;
+      height: 300px;
+      width: calc(100% - 80px);
+      margin-right: 80px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      cursor: crosshair;
+    }
+
+    /* Candle elements */
+    .candle {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .candle.highlighted {
+      z-index: 3;
+    }
+
+    .vertical-indicator-line {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 420px;
+      background-color: rgba(255, 255, 255, 0.3);
+      z-index: 1;
+    }
+
+    .candle-wick {
+      position: absolute;
+      width: 1px;
+      background-color: #00b386;
+      opacity: 1;
+      transition: opacity 0.1s, width 0.1s;
+    }
+
+    .candle-wick.red {
+      background-color: #ff5252;
+    }
+
+    .candle-wick.highlighted {
+      width: 2px;
+    }
+
+    .candle-body {
+      position: absolute;
+      background-color: #00b386;
+      opacity: 1;
+      transition: opacity 0.1s, width 0.1s, left 0.1s;
+    }
+
+    .candle-body.red {
+      background-color: #ff5252;
+    }
+
+    .candle-body.highlighted {
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Current price line */
+    .current-price-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: #00b386;
+      z-index: 2;
+    }
+
+    .current-price-label {
+      position: absolute;
+      right: 0;
+      transform: translateY(-50%);
+      background-color: #00b386;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 3;
+    }
+
+    /* Hover elements */
+    .hover-vertical-line {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.3);
+      z-index: 2;
+    }
+
+    .hover-horizontal-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.3);
+      z-index: 2;
+    }
+
+    .hover-tooltip {
+      position: absolute;
+      background-color: rgba(31, 41, 55, 0.95);
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      z-index: 20;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-width: 120px;
+    }
+
+    .tooltip-header {
+      margin-bottom: 8px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 4px;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .tooltip-label {
+      color: #9ca3af;
+    }
+
+    .tooltip-value {
+      font-weight: bold;
+    }
+
+    .tooltip-value.green {
+      color: #00b386;
+    }
+
+    .tooltip-value.red {
+      color: #ff5252;
+    }
+
+    /* Volume info */
+    .volume-info {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .volume-label {
+      color: #ff5252;
+    }
+
+    /* Volume chart */
+    .volume-labels {
+      position: absolute;
+      right: 0;
+      top: 330px;
+      height: 90px;
+      width: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 1;
+    }
+
+    .volume-label-item {
+      color: #9ca3af;
+      font-size: 12px;
+      text-align: right;
+      padding-right: 8px;
+    }
+
+    .volume-chart {
+      position: relative;
+      height: 90px;
+      width: calc(100% - 80px);
+      margin-right: 80px;
+      margin-top: 8px;
+    }
+
+    .volume-bar {
+      position: absolute;
+      bottom: 0;
+      background-color: #00b386;
+      opacity: 1;
+      transition: opacity 0.1s, width 0.1s;
+      z-index: 1;
+    }
+
+    .volume-bar.red {
+      background-color: #ff5252;
+    }
+
+    .volume-bar.highlighted {
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+      z-index: 3;
+    }
+
+    /* Date labels */
+    .date-labels {
+      position: absolute;
+      bottom: 0;
+      margin-bottom: -15px;
+      left: 0;
+      right: 80px;
+      display: flex;
+      justify-content: space-between;
+      color: #9ca3af;
+      font-size: 10px;
+      padding-top: 4px;
+    }
+
+    .date-label-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: auto;
+    }
+
+    .date-grid-line {
+      position: absolute;
+      bottom: 16px;
+      height: 420px;
+      width: 1px;
+      background-color: rgba(255, 255, 255, 0.05);
+      z-index: 1;
+    }
+
+    .date-label {
+      position: relative;
+      z-index: 2;
+      background-color: #111827;
+      padding: 0 4px;
+    }
+
+    /* Fullscreen mode */
+    .fullscreen {
+      height: 100vh;
+    }
+  
