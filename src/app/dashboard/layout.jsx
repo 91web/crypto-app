@@ -3,7 +3,7 @@ import Navbar from "./components/header";
 import CryptoTicker from "./components/current";
 
 export default function DashboardLayout({ children }) {
-  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       {" "}
@@ -19,9 +19,7 @@ export default function DashboardLayout({ children }) {
           {children}
         </div>
       </main>
-      <footer className="bg-gray-800 text-white p-2 text-center">
-        &copy; {currentYear} Crypto Trading Platform
-      </footer>
+
     </div>
   );
 }
