@@ -572,10 +572,10 @@ export default function CryptoTrading() {
 
         <div>
           <div style={styles.inputContainer}>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", fontSize: "12px" }}>
               Limit price <InfoIcon />
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", fontSize: "10px" }}>
               <input
                 type="text"
                 value={limitPrice}
@@ -587,10 +587,10 @@ export default function CryptoTrading() {
           </div>
 
           <div style={styles.inputContainer}>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", fontSize: "12px" }}>
               Amount <InfoIcon />
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "left" , fontSize: "10px", }}>
               <input
                 type="text"
                 value={amount}

@@ -117,7 +117,7 @@ const styles = {
     border: "none",
     color: "white",
     textAlign: "right",
-    width: "100px",
+    width: "50px",
     outline: "none",
   },
   checkboxContainer: {
