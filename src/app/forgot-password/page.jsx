@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import AppLog from "../../assets/svg/logo.svg";
+import { useRouter } from "next/navigation";
+import bcrypt from "bcryptjs";
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -9,73 +11,81 @@ function ForgotPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isEmailFound, setIsEmailFound] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  const router = useRouter();
 
   const handleFindAccount = (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setMessage({ text: "", type: "" });
 
-    // Validate email
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      setError("Please enter a valid email address");
+      setMessage({ text: "Please enter a valid email address", type: "error" });
       return;
     }
 
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.email === email) {
+    const storedUsers = localStorage.getItem("users");
+    if (storedUsers) {
+      const users = JSON.parse(storedUsers);
+      // Assuming 'users' is an array of user objects
+      const user = users.find((u) => u.email === email.toLowerCase());
+      if (user) {
         setIsEmailFound(true);
-        setSuccess("Account found. Please set a new password.");
+        setMessage({
+          text: "Account found. Please reset your password.",
+          type: "success",
+        });
       } else {
-        setError("No account found with this email");
-        setTimeout(() => {
-          window.location.href = "/sign-up";
-        }, 2000);
+        setMessage({ text: "No account found with this email", type: "error" });
+        setTimeout(() => router.push("/sign-up"), 2000);
       }
+    } else {
+      setMessage({
+        text: "No user data found. Please register.",
+        type: "error",
+      });
+      setTimeout(() => router.push("/sign-up"), 2000);
     }
   };
 
   const handleResetPassword = (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setMessage({ text: "", type: "" });
 
-    // Validate password
-    if (!password || password.length < 8) {
-      setError("Password must be at least 8 characters");
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      setMessage({
+        text: "Password must be at least 8 characters, include upper/lowercase letters, numbers, and a special character.",
+        type: "error",
+      });
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setMessage({ text: "Passwords do not match", type: "error" });
       return;
     }
 
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.email === email) {
-        // In a real app, you would hash the password before saving
-        const updatedUser = { ...user, password };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        setSuccess("Password reset successfully!");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
+    const storedUsers = localStorage.getItem("users");
+    if (storedUsers) {
+      let users = JSON.parse(storedUsers);
+      const userIndex = users.findIndex((u) => u.email === email.toLowerCase());
+      if (userIndex !== -1) {
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        users[userIndex] = { ...users[userIndex], password: hashedPassword };
+        localStorage.setItem("users", JSON.stringify(users));
+
+        setMessage({ text: "Password reset successfully!", type: "success" });
+        setTimeout(() => router.push("/login"), 2000);
       } else {
-        setError("Account verification failed");
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 2000);
+        setMessage({ text: "Account verification failed", type: "error" });
+        setTimeout(() => router.push("/login"), 2000);
       }
     } else {
-      setError("Account not found");
-      setTimeout(() => {
-        window.location.href = "/sign-up";
-      }, 2000);
+      setMessage({ text: "Account not found", type: "error" });
+      setTimeout(() => router.push("/sign-up"), 2000);
     }
   };
 
@@ -96,8 +106,7 @@ function ForgotPasswordPage() {
           borderRadius: 8,
           backgroundColor: "#20252B",
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-          width: "100%",
-          maxWidth: 500,
+          width: 500,
           margin: "0 auto",
         }}
       >
@@ -111,59 +120,51 @@ function ForgotPasswordPage() {
             margin: "0 auto",
           }}
         />
-        <h2 style={{ textAlign: "center", marginBottom: 24, color: "#fff" }}>
-          {isEmailFound ? "Reset Password" : "Forgot Password"}
+        <h2 style={{ textAlign: "center", color: "#fff", marginBottom: 24 }}>
+          {isEmailFound ? "Reset Password" : "Find Your Account"}
         </h2>
 
-        {error && (
+        {message.text && (
           <div
             style={{
-              color: "#ff6b6b",
-              backgroundColor: "rgba(255, 107, 107, 0.1)",
               padding: "10px",
-              borderRadius: 4,
-              marginBottom: 16,
+              borderRadius: "4px",
+              marginBottom: "16px",
+              backgroundColor:
+                message.type === "success"
+                  ? "rgba(40, 167, 69, 0.2)"
+                  : "rgba(220, 53, 69, 0.2)",
+              color: message.type === "success" ? "#28a745" : "#dc3545",
               textAlign: "center",
+              border: `1px solid ${
+                message.type === "success" ? "#28a745" : "#dc3545"
+              }`,
             }}
           >
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div
-            style={{
-              color: "#51cf66",
-              backgroundColor: "rgba(81, 207, 102, 0.1)",
-              padding: "10px",
-              borderRadius: 4,
-              marginBottom: 16,
-              textAlign: "center",
-            }}
-          >
-            {success}
+            {message.text}
           </div>
         )}
 
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLowerCase())}
           placeholder="Enter your email"
           style={{
             width: "100%",
-            padding: 12,
+            padding: 8,
             borderRadius: 4,
-            border: "1px solid #2a3038",
-            backgroundColor: "#2a3038",
+            border: "1px solid #ccc",
+            backgroundColor: "#333",
             color: "#fff",
             marginBottom: 16,
           }}
           disabled={isEmailFound}
+          required
         />
 
         {isEmailFound && (
-          <div>
+          <>
             <div style={{ position: "relative", marginBottom: 16 }}>
               <input
                 type={showPassword ? "text" : "password"}
@@ -172,13 +173,14 @@ function ForgotPasswordPage() {
                 placeholder="New Password"
                 style={{
                   width: "100%",
-                  padding: 12,
+                  padding: 8,
                   borderRadius: 4,
-                  border: "1px solid #2a3038",
-                  backgroundColor: "#2a3038",
+                  border: "1px solid #ccc",
+                  backgroundColor: "#333",
                   color: "#fff",
                   paddingRight: 40,
                 }}
+                required
               />
               <button
                 type="button"
@@ -196,21 +198,23 @@ function ForgotPasswordPage() {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+
             <div style={{ position: "relative", marginBottom: 16 }}>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm New Password"
+                placeholder="Confirm Password"
                 style={{
                   width: "100%",
-                  padding: 12,
+                  padding: 8,
                   borderRadius: 4,
-                  border: "1px solid #2a3038",
-                  backgroundColor: "#2a3038",
+                  border: "1px solid #ccc",
+                  backgroundColor: "#333",
                   color: "#fff",
                   paddingRight: 40,
                 }}
+                required
               />
               <button
                 type="button"
@@ -228,14 +232,14 @@ function ForgotPasswordPage() {
                 {showConfirmPassword ? "Hide" : "Show"}
               </button>
             </div>
-          </div>
+          </>
         )}
 
         <button
           type="submit"
           style={{
             width: "100%",
-            padding: 12,
+            padding: 10,
             background:
               "linear-gradient(90deg, #483BEB 0%, #7847E1 47.92%, #DD568D 96.35%)",
             borderRadius: 8,
@@ -243,37 +247,19 @@ function ForgotPasswordPage() {
             border: "none",
             cursor: "pointer",
             fontWeight: "bold",
-            fontSize: 16,
-            marginTop: 8,
           }}
         >
-          {isEmailFound ? "Reset Password" : "Continue"}
+          {isEmailFound ? "Reset Password" : "Find Account"}
         </button>
 
-        {isEmailFound && (
-          <button
-            type="button"
-            onClick={() => {
-              setIsEmailFound(false);
-              setPassword("");
-              setConfirmPassword("");
-            }}
-            style={{
-              width: "100%",
-              padding: 12,
-              background: "transparent",
-              borderRadius: 8,
-              color: "#ccc",
-              border: "1px solid #2a3038",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: 16,
-              marginTop: 16,
-            }}
+        <p style={{ textAlign: "center", color: "#fff", marginTop: 16 }}>
+          <a
+            href="/login"
+            style={{ color: "#8a67f5", textDecoration: "underline" }}
           >
-            Back
-          </button>
-        )}
+            Back to Login
+          </a>
+        </p>
       </form>
     </div>
   );

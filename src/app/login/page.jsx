@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import AppLog from "../../assets/svg/logo.svg";
 import bcrypt from "bcryptjs";
+import { useRouter } from "next/navigation";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,30 +11,32 @@ function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
-
+  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.email === email && bcrypt.compareSync(password, user.password)) {
+
+    const storedUsers = localStorage.getItem("users");
+    if (storedUsers) {
+      const users = JSON.parse(storedUsers);
+      // Find user with matching email
+      const user = users.find((u) => u.email === email);
+
+      if (user && bcrypt.compareSync(password, user.password)) {
         setMessage({ text: "Login Successful!", type: "success" });
         setTimeout(() => {
-          window.location.href = "/dashboard";
+          router.push("/dashboard");
         }, 1500);
       } else {
         setMessage({ text: "Invalid email or password", type: "error" });
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 1000);
+        // No need to redirect immediately on failed login; just show error
       }
     } else {
       setMessage({
-        text: "User not found. Please register to proceed!",
+        text: "No registered users found. Please sign up first.",
         type: "error",
       });
       setTimeout(() => {
-        window.location.href = "/sign-up";
+        router.push("/sign-up");
       }, 1500);
     }
   };
@@ -96,7 +99,7 @@ function LoginPage() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLowerCase())}
           placeholder="Email"
           style={{
             width: "100%",

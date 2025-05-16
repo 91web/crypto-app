@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import AppLog from "../../assets/svg/logo.svg";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
+import { useRouter } from "next/navigation";
 
-function RegisterPage() {
+function SignUp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ function RegisterPage() {
   const [isHover, setIsHover] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
 
+  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
     setMessage({ text: "", type: "" });
@@ -23,18 +25,12 @@ function RegisterPage() {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!email || !username || !password || !confirmPassword) {
-      setMessage({
-        text: "Please fill in all fields",
-        type: "error",
-      });
+      setMessage({ text: "Please fill in all fields", type: "error" });
       return;
     }
 
     if (!emailRegex.test(email)) {
-      setMessage({
-        text: "Invalid email format",
-        type: "error",
-      });
+      setMessage({ text: "Invalid email format", type: "error" });
       return;
     }
 
@@ -43,37 +39,36 @@ function RegisterPage() {
         text: "Password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character",
         type: "error",
       });
-      setTimeout(() => {
-        window.location.href = "/sign-up";
-      }, 500);
-      
       return;
     }
 
     if (password !== confirmPassword) {
-      setMessage({
-        text: "Passwords do not match",
-        type: "error",
-      });
-      setTimeout(() => {
-        window.location.href = "/sign-up";
-      }, 500);
-      
+      setMessage({ text: "Passwords do not match", type: "error" });
+      return;
+    }
+
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if email already exists
+    const emailExists = existingUsers.some((user) => user.email === email);
+
+    if (emailExists) {
+      setMessage({ text: "Email already registered", type: "error" });
       return;
     }
 
     const userId = uuidv4();
     const hashedPassword = bcrypt.hashSync(password, 10);
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        id: userId,
-        email,
-        username,
-        password: hashedPassword,
-      })
-    );
+    const newUser = {
+      id: userId,
+      email,
+      username,
+      password: hashedPassword,
+    };
+
+    existingUsers.push(newUser);
+    localStorage.setItem("users", JSON.stringify(existingUsers));
 
     setMessage({
       text: "Registration successful! Redirecting to login...",
@@ -81,9 +76,10 @@ function RegisterPage() {
     });
 
     setTimeout(() => {
-      window.location.href = "/login";
+      router.push ( "/login");
     }, 1500);
   };
+  
 
   return (
     <div
@@ -143,7 +139,7 @@ function RegisterPage() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLowerCase())}
           placeholder="Email"
           style={{
             width: "100%",
@@ -288,4 +284,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default SignUp;
