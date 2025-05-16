@@ -9,6 +9,7 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isHover, setIsHover] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,14 +17,24 @@ function LoginPage() {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       if (user.email === email && bcrypt.compareSync(password, user.password)) {
-        alert("Login Successful!");
-        window.location.href = "/dashboard";
+        setMessage({ text: "Login Successful!", type: "success" });
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1500);
       } else {
-        alert("Invalid email or password");
+        setMessage({ text: "Invalid email or password", type: "error" });
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
       }
     } else {
-      alert("User not found. Please register to proceed!");
-      window.location.href = "/sign-up";
+      setMessage({
+        text: "User not found. Please register to proceed!",
+        type: "error",
+      });
+      setTimeout(() => {
+        window.location.href = "/sign-up";
+      }, 1500);
     }
   };
 
@@ -60,6 +71,28 @@ function LoginPage() {
         <h2 style={{ textAlign: "center", marginBottom: 24, color: "#fff" }}>
           Crypto Login
         </h2>
+
+        {message.text && (
+          <div
+            style={{
+              padding: "10px",
+              borderRadius: "4px",
+              marginBottom: "16px",
+              backgroundColor:
+                message.type === "success"
+                  ? "rgba(40, 167, 69, 0.2)"
+                  : "rgba(220, 53, 69, 0.2)",
+              color: message.type === "success" ? "#28a745" : "#dc3545",
+              textAlign: "center",
+              border: `1px solid ${
+                message.type === "success" ? "#28a745" : "#dc3545"
+              }`,
+            }}
+          >
+            {message.text}
+          </div>
+        )}
+
         <input
           type="email"
           value={email}

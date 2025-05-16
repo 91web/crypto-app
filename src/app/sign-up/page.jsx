@@ -12,40 +12,77 @@ function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isHover, setIsHover] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setMessage({ text: "", type: "" });
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!email || !username || !password || !confirmPassword) {
-      alert("Please fill in all fields");
-    } else if (!emailRegex.test(email)) {
-      alert("Invalid email");
-    } else if (!passwordRegex.test(password)) {
-      alert(
-        "Password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character"
-      );
-    } else if (password !== confirmPassword) {
-      alert("Passwords do not match");
-    } else {
-      const userId = uuidv4();
-      const hashedPassword = bcrypt.hashSync(password, 10);
-      alert("Registration successful, Please login!");
-      // Save user data in local storage
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: userId,
-          email,
-          username,
-          password: hashedPassword,
-        })
-      );
-      // Redirect to login page
-      window.location.href = "/login";
+      setMessage({
+        text: "Please fill in all fields",
+        type: "error",
+      });
+      return;
     }
+
+    if (!emailRegex.test(email)) {
+      setMessage({
+        text: "Invalid email format",
+        type: "error",
+      });
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setMessage({
+        text: "Password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character",
+        type: "error",
+      });
+      setTimeout(() => {
+        window.location.href = "/sign-up";
+      }, 500);
+      
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage({
+        text: "Passwords do not match",
+        type: "error",
+      });
+      setTimeout(() => {
+        window.location.href = "/sign-up";
+      }, 500);
+      
+      return;
+    }
+
+    const userId = uuidv4();
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        id: userId,
+        email,
+        username,
+        password: hashedPassword,
+      })
+    );
+
+    setMessage({
+      text: "Registration successful! Redirecting to login...",
+      type: "success",
+    });
+
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 1500);
   };
 
   return (
@@ -81,6 +118,28 @@ function RegisterPage() {
         <h2 style={{ textAlign: "center", marginBottom: 24, color: "#fff" }}>
           Crypto Register
         </h2>
+
+        {message.text && (
+          <div
+            style={{
+              padding: "10px",
+              borderRadius: "4px",
+              marginBottom: "16px",
+              backgroundColor:
+                message.type === "success"
+                  ? "rgba(40, 167, 69, 0.2)"
+                  : "rgba(220, 53, 69, 0.2)",
+              color: message.type === "success" ? "#28a745" : "#dc3545",
+              textAlign: "center",
+              border: `1px solid ${
+                message.type === "success" ? "#28a745" : "#dc3545"
+              }`,
+            }}
+          >
+            {message.text}
+          </div>
+        )}
+
         <input
           type="email"
           value={email}
@@ -199,7 +258,7 @@ function RegisterPage() {
             textAlign: "center",
             color: "#fff",
             marginTop: 16,
-            fontSize: { xs: 12, md: 16 },
+            fontSize: 16,
           }}
         >
           Already have an account?{" "}

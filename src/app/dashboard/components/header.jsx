@@ -186,11 +186,11 @@ const Navbar = () => {
 
   const handleLogout = () => {
     if (window.confirm("Do you want to logout?")) {
-      // Clear client-side storage
-      localStorage.removeItem("user");
-      setUser(null);
+      // Remove only session-related data (keep user info)
+      localStorage.removeItem("sessionToken"); // Example: Remove token instead of user
+      // localStorage.setItem("user", JSON.stringify(user)); // Optional: Explicitly preserve user
 
-      // Call logout API
+      // Call logout API (server-side session cleanup)
       fetch("/api/logout", {
         method: "POST",
         credentials: "include",
@@ -204,6 +204,7 @@ const Navbar = () => {
         });
     }
   };
+  
 
   // Safe user data access
   const getUserIdentifier = () => {
