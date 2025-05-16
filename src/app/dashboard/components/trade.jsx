@@ -620,6 +620,7 @@ export default function CryptoTrading() {
                     <div
                       key={type}
                       style={{
+                        fontSize: "12px",
                         ...styles.dropdownItem,
                         ...(orderTypeDropdown === type
                           ? styles.dropdownItemHover
