@@ -268,7 +268,7 @@ const CryptoTicker = () => {
           flexDirection: isMobile ? "row" : "row",
           flexWrap: isMobile ? "nowrap" : "nowrap",
           gap: isMobile ? "10px" : "24px",
-          overflowX: isMobile ? "auto" : "visible",
+          overflowX: isMobile ? "auto" : "hidden",
           width: isMobile ? "100%" : "auto",
           paddingBottom: isMobile ? "4px" : "0",
         }}

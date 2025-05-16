@@ -17,10 +17,7 @@ function ForgotPasswordPage() {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       if (user.email === email && bcrypt.compareSync(password, user.password)) {
-        alert("Login Successful!");
-        window.location.href = "/dashboard";
-      } else {
-        alert("Invalid email or password");
+        alert("Invalid email");
       }
     } else {
       alert("User not found. Please register to proceed!");

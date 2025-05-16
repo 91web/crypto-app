@@ -207,7 +207,14 @@ function RegisterPage() {
             Login
           </a>
         </p>
-        <p style={{ textAlign: "center", color: "#fff", marginTop: 16 }}>
+        <p
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            marginTop: 16,
+            fontSize: "12px",
+          }}
+        >
           By registering, you agree to our{" "}
           <a href="#" className="link">
             Terms of Service

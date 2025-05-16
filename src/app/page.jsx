@@ -21,7 +21,7 @@ const styles = {
     backgroundColor: "#555",
     borderRadius: "5px",
     overflow: "hidden",
-    marginBottom: "20px",
+    marginBottom: "10px",
   },
   progressBar: {
     height: "100%",
@@ -79,7 +79,7 @@ export default function LoaderPage() {
           alt="Logo"
           style={{
             width: 200,
-            marginBottom: 20,
+            marginBottom: "5px",
             display: "block",
             marginY: "2px",
 

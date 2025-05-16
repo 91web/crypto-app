@@ -22,16 +22,20 @@ const styles = {
     backgroundColor: "#1F2937",
     borderRadius: "8px",
     padding: "10px",
-    height: "100%",
-    maxHeight: "80vh",
+    height: "auto", // Changed from fixed height to auto
+    minHeight: "400px", // Minimum height for mobile
+    overflow: "hidden", 
+    marginBottom: "20px"
   },
   panel2: {
     width: "100%",
     backgroundColor: "#1F2937",
     borderRadius: "8px",
     padding: "10px",
-    height: "100%",
-    maxHeight: "90vh",
+    height: "auto", // Changed from fixed height to auto
+    minHeight: "400px", // Minimum height for mobile
+    overflow: "hidden", // Add scroll if content overflows
+    marginBottom: "20px", 
   },
   tabButton: {
     padding: "8px 16px",

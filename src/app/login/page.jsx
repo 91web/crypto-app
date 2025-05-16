@@ -122,9 +122,13 @@ function LoginPage() {
               onChange={(e) => setRememberMe(e.target.checked)}
               style={{ marginRight: 8 }}
             />
-            <span style={{ color: "#fff" }}>Remember Me</span>
+            <span style={{ color: "#fff", fontSize: "12px" }}>Remember Me</span>
           </div>
-          <a href="/forgot-password" className="link">
+          <a
+            href="/forgot-password"
+            className="link"
+            style={{ fontSize: "12px" }}
+          >
             Forgot Password?
           </a>
         </div>
@@ -153,7 +157,14 @@ function LoginPage() {
             Sign Up
           </a>
         </p>
-        <p style={{ textAlign: "center", color: "#fff", marginTop: 16 }}>
+        <p
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            marginTop: 16,
+            fontSize: "12px",
+          }}
+        >
           By logging in, you agree to our{" "}
           <a href="#" className="link">
             Terms of Service
