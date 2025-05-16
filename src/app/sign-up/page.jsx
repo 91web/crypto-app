@@ -76,10 +76,9 @@ function SignUp() {
     });
 
     setTimeout(() => {
-      router.push ( "/login");
+      router.push("/login");
     }, 1500);
   };
-  
 
   return (
     <div
