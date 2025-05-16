@@ -185,6 +185,7 @@ const styles = {
   },
   orderTypeDropdown: {
     position: "relative",
+    fontSize: "12px",
   },
   dropdownMenu: {
     position: "absolute",
