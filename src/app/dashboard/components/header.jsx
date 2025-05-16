@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AppLog from "../../../assets/svg/logo.svg";
-import NavBg from "../../../assets/svg/navbg.svg";
+
 import Log from "../../../assets/svg/log.svg";
 import Wor from "../../../assets/svg/world.svg";
 import Menu from "../../../assets/svg/menu.svg";
-
+import styles from "../../style/header.css";
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -63,165 +63,7 @@ const Navbar = () => {
     return user.username || user.email?.split("@")[0] || "user";
   };
 
-  // Styles
-  const styles = {
-    header: {
-      background: "#1C2127",
-      color: "#fff",
-      padding: "10px 20px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      position: "relative",
-      flexWrap: "wrap",
-      width: "100%",
-      boxSizing: "border-box",
-    },
-    leftContainer: {
-      display: "flex",
-      alignItems: "center",
-      gap: "10px",
-    },
-    rightContainer: {
-      display: "flex",
-      alignItems: "center",
-      gap: "10px",
-    },
-    desktopNav: {
-      display: "flex",
-      gap: "20px",
-      marginLeft: "20px",
-    },
-    navLink: {
-      color: "#ccc",
-      textDecoration: "none",
-      fontSize: "16px",
-      whiteSpace: "nowrap",
-    },
-    userInfo: {
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      backgroundImage: `url(${NavBg.src})`,
-      padding: "12px",
-      borderRadius: "10px",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      cursor: "pointer",
-    },
-    avatar: {
-      height: "24px",
-      width: "24px",
-      borderRadius: "50%",
-      objectFit: "cover",
-    },
-    mobileAvatar: {
-      height: "34px",
-      width: "34px",
-      borderRadius: "50%",
-      objectFit: "cover",
-      cursor: "pointer",
-    },
-    userText: {
-      fontSize: "13px",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      maxWidth: "120px",
-    },
-    iconButton: {
-      background: "none",
-      border: "none",
-      color: "#ccc",
-      fontSize: "18px",
-      cursor: "pointer",
-      padding: "5px",
-    },
-    menuButton: {
-      background: "none",
-      border: "none",
-      color: "#ccc",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      padding: "5px",
-    },
-    mobileMenu: {
-      position: "absolute",
-      top: "100%",
-      right: "0",
-      background: "#1C2127",
-      padding: "20px",
-      borderRadius: "0 0 10px 10px",
-      boxShadow: "0px 5px 10px rgba(0,0,0,0.2)",
-      zIndex: 1000,
-      width: "200px",
-    },
-    mobileNav: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "15px",
-    },
-    mobileNavLink: {
-      color: "#fff",
-      textDecoration: "none",
-      fontSize: "16px",
-      padding: "10px 0",
-      display: "block",
-      borderBottom: "1px solid #2a3038",
-    },
-    mobileLogoutButton: {
-      background: "none",
-      border: "none",
-      color: "#fff",
-      fontSize: "16px",
-      cursor: "pointer",
-      padding: "10px 0",
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-    },
-    confirmDialog: {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      background: "#2A3038",
-      padding: "20px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-      zIndex: 2000,
-      width: "300px",
-      textAlign: "center",
-    },
-    confirmButton: {
-      background: "#E53E3E",
-      color: "white",
-      border: "none",
-      padding: "8px 16px",
-      borderRadius: "4px",
-      margin: "0 10px",
-      cursor: "pointer",
-    },
-    cancelButton: {
-      background: "#4A5568",
-      color: "white",
-      border: "none",
-      padding: "8px 16px",
-      borderRadius: "4px",
-      margin: "0 10px",
-      cursor: "pointer",
-    },
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: "rgba(0,0,0,0.5)",
-      zIndex: 1000,
-    },
-  };
+
 
   if (loading) {
     return (
